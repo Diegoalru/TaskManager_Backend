@@ -14,6 +14,7 @@ export async function getTasks(req, res) {
           description: task.description,
           date: task.date,
           status: task.status,
+          createdAt: task.createdAt,
         };
       }),
     });

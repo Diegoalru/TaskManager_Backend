@@ -11,11 +11,14 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "http://localhost:8000"
+      "http://localhost:8000",
+      "https://taskmanager.darssolutions.live",
+      "http://taskmanager.darssolutions.live"
     ],
-    credentials: false,
+    credentials: true,
   })
 );
+
 app.use(
   morgan(
     ":remote-addr :method :url :status (:res[content-length] content-length) - :response-time ms"

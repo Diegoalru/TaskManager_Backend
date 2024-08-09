@@ -88,10 +88,13 @@ export async function login(req, res) {
 
     return res
       .status(200)
-      .cookie("token", token, {
+      .cookie("token", token, 
+      {
         secure: true,
-        sameSite: "none",
-      })
+        httpOnly: true,
+        // sameSite: "none",
+      }
+      )
       .json({
         message: "Login successful",
         user: {
@@ -153,27 +156,21 @@ export async function verifyToken(req, res) {
   }
 
   try {
-    jwt.verify(token, process.env.JWT_SECRET, (error, user) => {
-      if (error) {
-        return res.status(401).json({
-          message: "Unauthorized",
-        });
-      }
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    const userFound = await User.findById(decodedToken.id);
 
-      const userFound = User.findById(user.id);
-      if (!userFound) {
-        return res.status(401).json({
-          message: "Unauthorized",
-        });
-      }
-
-      return res.status(200).json({
-        message: "Token is valid",
-        user: {
-          id: userFound._id,
-          username: userFound.username,
-        },
+    if (!userFound) {
+      return res.status(401).json({
+        message: "Unauthorized",
       });
+    }
+
+    return res.status(200).json({
+      message: "Token is valid",
+      user: {
+        id: userFound._id,
+        username: userFound.username,
+      },
     });
   } catch (error) {
     return res.status(500).json({

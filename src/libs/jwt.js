@@ -8,7 +8,7 @@ export async function createAccessToken(payload) {
       },
       process.env.JWT_SECRET,
       {
-        expiresIn: "1d",
+        expiresIn: "15m",
       },
       (err, token) => {
         if (err) reject(err);
@@ -35,7 +35,7 @@ export async function createRefreshToken(payload) {
       },
       process.env.JWT_SECRET,
       {
-        expiresIn: "7d",
+        expiresIn: "15m",
       },
       (err, token) => {
         if (err) reject(err);
